@@ -23,14 +23,12 @@ jobs:
       - run: npm test
       - run: mkdir secrets
       - name: Create certificate
-        id: write_file
         uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'benchilcott.com.pem'
           fileDir: './secrets/'
           encodedString: ${{ secrets.SSL_CERTIFICATE }}
       - name: Create key
-        id: write_file
         uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'benchilcott.com.key'
