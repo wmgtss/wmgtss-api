@@ -1,3 +1,5 @@
+# Built output
+dist
 
 # Logs
 logs
@@ -37,3 +39,6 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 .next
+
+# Secrets
+secrets
