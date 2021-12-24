@@ -1,4 +1,4 @@
-name: CI
+name: Deploy to VM
 
 on:
   push:
@@ -22,15 +22,15 @@ jobs:
       - run: npm run build --if-present
       - run: npm test
       - run: mkdir secrets
-      - name: Create certificate
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileName: 'benchilcott.com.pem'
-          fileDir: './secrets/'
-          encodedString: ${{ secrets.SSL_CERTIFICATE }}
-      - name: Create key
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileName: 'benchilcott.com.key'
-          fileDir: './secrets/'
-          encodedString: ${{ secrets.SSL_KEY }}
+      - run: 'echo "$SSL_KEY" > ./secrets/benchilcott.com.key'
+        shell: bash
+        env:
+          SSH_KEY: ${{secrets.SSL_KEY}}
+      - run: 'echo "$SSL_CERT" > ./secrets/benchilcott.com.pem'
+        shell: bash
+        env:
+          SSH_KEY: ${{secrets.SSL_CERT}}
+      - run: 'echo "$DOT_ENV" > ./.env'
+        shell: bash
+        env:
+          SSH_KEY: ${{secrets.DOT_ENV}}
