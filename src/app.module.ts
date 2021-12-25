@@ -1,19 +1,24 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from './app.controller';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import config from './config';
 
-// TODO: Add swagger: https://docs.nestjs.com/openapi/introduction
+const configModule = ConfigModule.forRoot({
+  isGlobal: true,
+  load: [config],
+});
+
+const dbModule = TypeOrmModule.forRootAsync({
+  imports: [ConfigModule],
+  useFactory: (configService: ConfigService) => configService.get('DATABASE'),
+  inject: [ConfigService],
+});
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [config],
-    }),
-    UserModule,
-    PostModule,
-  ],
+  imports: [configModule, dbModule, UserModule, PostModule],
+  controllers: [AppController],
 })
 export class AppModule {}
