@@ -32,3 +32,4 @@ jobs:
         shell: bash
         env:
           SSL_KEY: ${{secrets.SSL_KEY}}
+      - run: sudo pm2 restart WMGTSS
