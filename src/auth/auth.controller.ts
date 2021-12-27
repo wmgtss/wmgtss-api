@@ -8,6 +8,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBody,
+  ApiExcludeEndpoint,
   ApiOkResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -27,6 +29,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @ApiOkResponse({ type: UserDto })
   @ApiUnauthorizedResponse({ description: 'Invalid email or password' })
+  @ApiBody({ type: LoginUserDto })
   async login(@Req() req, @Res() res) {
     const loginUserDto: LoginUserDto = req.body;
     const token = await this.authService.login({
@@ -42,6 +45,7 @@ export class AuthController {
   }
 
   @Post('signup')
+  @ApiExcludeEndpoint()
   async signUp(@Body() createUserDto: CreateUserDto, @Res() res) {
     const { email, password, name } = createUserDto;
 

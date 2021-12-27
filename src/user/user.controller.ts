@@ -19,7 +19,7 @@ import { PublicUserDto } from './dto/public.user.dto';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
-@ApiTags('Resources')
+@ApiTags('Users')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
