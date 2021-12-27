@@ -13,8 +13,8 @@ async function createApp() {
     const fs = require('fs');
     return await NestFactory.create(AppModule, {
       httpsOptions: {
-        key: fs.readFileSync('./secrets/benchilcott.com.key'),
-        cert: fs.readFileSync('./secrets/benchilcott.com.pem'),
+        key: fs.readFileSync('./secrets/wmgtss.com.key'),
+        cert: fs.readFileSync('./secrets/wmgtss.com.pem'),
       },
     });
   } else {
