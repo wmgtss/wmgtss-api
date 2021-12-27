@@ -10,7 +10,7 @@ export const dbConfig = (): PostgresConnectionOptions => ({
   database: process.env.DATABASE_NAME || 'wmgtss',
   synchronize: true,
   entities: [User],
-  logging: true,
+  logging: false,
   logger: 'advanced-console',
 });
 
