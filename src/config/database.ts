@@ -1,3 +1,4 @@
+import { User } from '../user/entity/user.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 export const dbConfig = (): PostgresConnectionOptions => ({
@@ -8,6 +9,9 @@ export const dbConfig = (): PostgresConnectionOptions => ({
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME || 'wmgtss',
   synchronize: true,
+  entities: [User],
+  logging: false,
+  logger: 'advanced-console',
 });
 
 export default dbConfig();

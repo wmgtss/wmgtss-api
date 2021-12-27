@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/strategy/jwt/jwt.guard';
 import { UserService } from './user.service';
 
 @ApiTags('Resources')
@@ -7,8 +8,18 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  getUser() {
-    return this.userService.getUser();
+  async getUsers() {
+    return this.userService.findAll();
+  }
+
+  @Post()
+  createUser(@Body() body) {
+    this.userService.create({
+      email: body.email,
+      password: body.password,
+      name: body.name,
+    });
   }
 }
