@@ -11,7 +11,7 @@ const jwtModule = JwtModule.registerAsync({
   imports: [ConfigModule],
   useFactory: (configService: ConfigService) => {
     return {
-      secret: configService.get<string>('JWT_Secret'),
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     };
   },
