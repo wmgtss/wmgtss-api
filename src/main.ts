@@ -31,7 +31,6 @@ async function bootstrap() {
     .setTitle('WMG: TSS API')
     .setDescription('API for the WMG Teaching Support System')
     .setVersion('1.0')
-    .addTag('Resources')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, document);
