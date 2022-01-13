@@ -31,7 +31,6 @@ export class PwnedMiddleware implements NestMiddleware {
     const lines = text.split('\n').map((line) => line.slice(0, -1));
     const match = lines.find((line) => line.startsWith(hash.substring(5, 41)));
 
-    console.log(match);
     if (match) {
       const count = match.split(':')[1];
       return count;

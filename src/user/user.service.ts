@@ -47,8 +47,7 @@ export class UserService {
   }
 
   async deleteById(id: string): Promise<string> {
-    const res = await this.userRepo.delete({ id });
-    console.log(res);
+    await this.userRepo.delete({ id });
     return id;
   }
 }
