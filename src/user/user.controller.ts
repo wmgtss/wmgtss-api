@@ -3,8 +3,10 @@ import {
   Delete,
   Get,
   Param,
+  Put,
   Req,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -30,6 +32,17 @@ export class UserController {
   @ApiUnauthorizedResponse({ description: 'Not signed in' })
   async getCurrent(@Request() req) {
     return req.user;
+  }
+
+  @Put('password')
+  @UseGuards(JwtAuthGuard)
+  @ApiUnauthorizedResponse({ description: 'Not signed in' })
+  async updateUser(@Req() req) {
+    const pwned = await this.userService.changePassword(
+      req.user.id,
+      req.body.password,
+    );
+    return { pwned };
   }
 
   @Get(':id')
