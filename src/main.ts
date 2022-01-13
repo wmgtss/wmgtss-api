@@ -36,6 +36,10 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   app.use(cookieParser());
+  app.enableCors({
+    origin: config().REACT_URL,
+    credentials: true,
+  });
 
   await app.listen(PORT, () => {
     logger.log(`App listening at http://localhost:${PORT}`);

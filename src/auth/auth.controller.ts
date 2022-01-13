@@ -7,6 +7,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   ApiBody,
   ApiExcludeEndpoint,
@@ -23,7 +24,17 @@ import { LocalAuthGuard } from './strategy/local/local.guard';
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private configService: ConfigService,
+  ) {}
+
+  cookieSettings = {
+    domain: this.configService.get('REACT_DOMAIN'),
+    secure: this.configService.get('HTTPS'),
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+  };
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
@@ -37,11 +48,18 @@ export class AuthController {
       password: loginUserDto.password,
     });
     return res
-      .cookie('access_token', token, {
-        httpOnly: true,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      })
+      .cookie('access_token', token, this.cookieSettings)
+      .status(200)
       .send(req.user);
+  }
+
+  @Post('logout')
+  @ApiOkResponse()
+  async logout(@Req() _req, @Res() res) {
+    return res
+      .cookie('access_token', null, this.cookieSettings)
+      .status(200)
+      .send('Logged out');
   }
 
   @Post('signup')
@@ -57,16 +75,9 @@ export class AuthController {
       password,
       name,
     });
-    res
-      .cookie('access_token', token, {
-        httpOnly: true,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      })
-      .status(201)
-      .send({
-        user,
-        pwned: createUserDto.pwned,
-      });
-    console.log(createUserDto.pwned);
+    res.cookie('access_token', token, this.cookieSettings).status(201).send({
+      user,
+      pwned: createUserDto.pwned,
+    });
   }
 }
