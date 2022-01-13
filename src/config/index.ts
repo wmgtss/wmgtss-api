@@ -5,5 +5,5 @@ export default () => ({
   HTTPS: !!process.env.HTTPS,
   DATABASE: dbConfig(),
   REACT_DOMAIN: process.env.REACT_DOMAIN || 'wmgtss.com',
-  REACT_URL: process.env.REACT_URL || 'https://wmgtss.com/',
+  REACT_URL: process.env.REACT_URL || 'https://wmgtss.com',
 });
