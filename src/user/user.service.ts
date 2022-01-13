@@ -5,6 +5,8 @@ import { User } from './entity/user.entity';
 import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from '../auth/dto/create.user.dto';
 import { PublicUserDto } from './dto/public.user.dto';
+import { isPasswordPwned } from 'src/util/pwned';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -44,6 +46,17 @@ export class UserService {
 
     delete user.password;
     return user;
+  }
+
+  async changePassword(id: string, plainPassword: string): Promise<number> {
+    const password = await bcrypt.hash(plainPassword, 10);
+    this.userRepo
+      .createQueryBuilder('user')
+      .update()
+      .set({ password })
+      .where('id = :id', { id })
+      .execute();
+    return await isPasswordPwned(plainPassword);
   }
 
   async deleteById(id: string): Promise<string> {

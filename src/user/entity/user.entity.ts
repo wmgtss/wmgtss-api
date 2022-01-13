@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -36,7 +37,7 @@ export class User extends BaseEntity {
   @CreateDateColumn()
   createdOn: Date;
 
-  @BeforeInsert() async hashPassword() {
+  @BeforeInsert() async createHash() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 
