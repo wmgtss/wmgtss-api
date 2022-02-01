@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { AuthModule } from './auth/auth.module';
+import { TopicsModule } from './topics/topics.module';
 import config from './config';
 
 const configModule = ConfigModule.forRoot({
@@ -19,7 +20,7 @@ const dbModule = TypeOrmModule.forRootAsync({
 });
 
 @Module({
-  imports: [configModule, dbModule, UserModule, PostModule, AuthModule],
+  imports: [configModule, dbModule, UserModule, PostModule, AuthModule, TopicsModule],
   controllers: [AppController],
 })
 export class AppModule {}

@@ -5,8 +5,6 @@ import {
   Param,
   Put,
   Req,
-  Request,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -27,10 +25,9 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: UserDto })
   @ApiUnauthorizedResponse({ description: 'Not signed in' })
-  async getCurrent(@Request() req) {
+  async getCurrent(@Req() req) {
     return req.user;
   }
 

@@ -5,9 +5,9 @@ import {
   Column,
   CreateDateColumn,
   BeforeInsert,
-  BeforeUpdate,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Role } from '../../role/role.enum';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -32,6 +32,14 @@ export class User extends BaseEntity {
     nullable: false,
   })
   name: string;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    array: true,
+    default: [Role.User],
+  })
+  roles: Role[];
 
   @Column()
   @CreateDateColumn()
