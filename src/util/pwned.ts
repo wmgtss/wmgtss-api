@@ -5,9 +5,9 @@ export async function isPasswordPwned(
   password: string,
 ): Promise<number | undefined> {
   if (!password) throw new BadRequestException();
+  const fetch = require('node-fetch');
 
   const hash = createHash('sha1').update(password).digest('hex').toUpperCase();
-  const fetch = require('node-fetch');
   const response = await fetch(
     'https://api.pwnedpasswords.com/range/' + hash.substring(0, 5),
   );

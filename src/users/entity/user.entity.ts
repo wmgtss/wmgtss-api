@@ -8,11 +8,15 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Role } from '../../role/role.enum';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('user')
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid') id: string;
+  @ApiProperty()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
+  @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: false,
@@ -27,12 +31,14 @@ export class User extends BaseEntity {
   })
   password: string;
 
+  @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: false,
   })
   name: string;
 
+  @ApiProperty()
   @Column({
     type: 'enum',
     enum: Role,
@@ -41,6 +47,7 @@ export class User extends BaseEntity {
   })
   roles: Role[];
 
+  @ApiProperty()
   @Column()
   @CreateDateColumn()
   createdOn: Date;

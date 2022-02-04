@@ -1,8 +1,9 @@
-import { User } from '../user/entity/user.entity';
+import { User } from '../users/entity/user.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { Topic } from '../topics/entity/topic.entity';
-import { Post } from '../post/entity/post.entity';
 import { AuthorTopic } from '../topics/entity/authourTopic.view';
+import { Post } from '../posts/entity/post.entity';
+import { AuthorPost } from '../posts/entity/authorPost.view';
 
 export const dbConfig = (): PostgresConnectionOptions => ({
   type: 'postgres',
@@ -12,7 +13,7 @@ export const dbConfig = (): PostgresConnectionOptions => ({
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME || 'wmgtss',
   synchronize: true,
-  entities: [User, Topic, Post, AuthorTopic],
+  entities: [User, Topic, AuthorTopic, Post, AuthorPost],
   logging: false,
   logger: 'advanced-console',
 });

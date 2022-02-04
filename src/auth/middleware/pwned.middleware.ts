@@ -6,7 +6,7 @@ import { isPasswordPwned } from '../../util/pwned';
 export class PwnedMiddleware implements NestMiddleware {
   async use(req: Request, _res: Response, next: NextFunction) {
     const count = await isPasswordPwned(req.body.password);
-    req.body.pwned = count;
+    req.pwned = count;
     next();
   }
 }

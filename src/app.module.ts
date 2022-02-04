@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
-import { UserModule } from './user/user.module';
-import { PostModule } from './post/post.module';
+import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TopicsModule } from './topics/topics.module';
+import { PostsModule } from './posts/posts.module';
 import config from './config';
 
 const configModule = ConfigModule.forRoot({
@@ -20,7 +20,7 @@ const dbModule = TypeOrmModule.forRootAsync({
 });
 
 @Module({
-  imports: [configModule, dbModule, UserModule, PostModule, AuthModule, TopicsModule],
+  imports: [configModule, dbModule, UsersModule, AuthModule, TopicsModule, PostsModule],
   controllers: [AppController],
 })
 export class AppModule {}

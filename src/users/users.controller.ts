@@ -15,17 +15,18 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/strategy/jwt/jwt.guard';
-import { PublicUserDto } from './dto/public.user.dto';
-import { UserDto } from './dto/user.dto';
-import { UserService } from './user.service';
+import { PublicUserDto } from './dto/user.public.dto';
+import { UsersService } from './users.service';
+import { User } from './entity/user.entity';
 
 @ApiTags('Users')
 @Controller('user')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @ApiOkResponse({ type: UserDto })
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: User })
   @ApiUnauthorizedResponse({ description: 'Not signed in' })
   async getCurrent(@Req() req) {
     return req.user;
@@ -35,7 +36,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiUnauthorizedResponse({ description: 'Not signed in' })
   async updateUser(@Req() req) {
-    const pwned = await this.userService.changePassword(
+    const pwned = await this.usersService.changePassword(
       req.user.id,
       req.body.password,
     );
@@ -48,7 +49,7 @@ export class UserController {
   @ApiUnauthorizedResponse({ description: 'Not signed in' })
   @ApiNotFoundResponse({ description: 'Not found' })
   async getUser(@Param('id') id: string) {
-    const user = await this.userService.findPublicById(id);
+    const user = await this.usersService.findPublicById(id);
     return user;
   }
 
@@ -57,7 +58,7 @@ export class UserController {
   @ApiNoContentResponse({ description: 'User deleted' })
   @ApiUnauthorizedResponse({ description: 'Not signed in' })
   async deleteCurrent(@Req() req) {
-    const id = await this.userService.deleteById(req.user.id);
+    const id = await this.usersService.deleteById(req.user.id);
     return { id };
   }
 }

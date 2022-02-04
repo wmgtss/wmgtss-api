@@ -9,4 +9,8 @@ export class CreatePostDto {
   @ApiProperty()
   @IsNotEmpty()
   content: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  topicId: string;
 }

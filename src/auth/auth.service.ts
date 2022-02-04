@@ -1,19 +1,19 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserDto } from './dto/login.user.dto';
-import { UserDto } from '../user/dto/user.dto';
-import { UserService } from '../user/user.service';
-import { CreateUserDto } from './dto/create.user.dto';
+import { LoginUserDto } from './dto/login.dto';
+import { UsersService } from '../users/users.service';
+import { SignupDto } from './dto/signup.dto';
+import { User } from '../users/entity/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
-  async signUp(createUserDto: CreateUserDto) {
-    const user: any = await this.userService.create(createUserDto);
+  async signUp(createUserDto: SignupDto) {
+    const user: any = await this.usersService.create(createUserDto);
     return { user, token: this.jwtService.sign({ sub: user.id }) };
   }
 
@@ -22,9 +22,9 @@ export class AuthService {
     return this.jwtService.sign({ sub: user.id });
   }
 
-  async validateUser(loginUserDto: LoginUserDto): Promise<UserDto> {
+  async validateUser(loginUserDto: LoginUserDto): Promise<User> {
     const { email, password } = loginUserDto;
-    const user = await this.userService.findForLogin(email);
+    const user = await this.usersService.findForLogin(email);
     if (user && (await user.validatePassword(password))) {
       delete user.password;
       return user;

@@ -2,19 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
-import { UserDto } from './dto/user.dto';
-import { CreateUserDto } from '../auth/dto/create.user.dto';
-import { PublicUserDto } from './dto/public.user.dto';
+import { SignupDto } from '../auth/dto/signup.dto';
+import { PublicUserDto } from './dto/user.public.dto';
 import { isPasswordPwned } from 'src/util/pwned';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
   ) {}
 
-  async findById(id: string): Promise<UserDto> {
+  async findById(id: string): Promise<User> {
     return await this.userRepo.findOne({ id });
   }
 
@@ -40,7 +39,7 @@ export class UserService {
     return user;
   }
 
-  async create(createUserDto: CreateUserDto): Promise<UserDto> {
+  async create(createUserDto: SignupDto): Promise<User> {
     const user = this.userRepo.create(createUserDto);
     await user.save();
 

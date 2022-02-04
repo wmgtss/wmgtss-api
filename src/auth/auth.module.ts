@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { UserModule } from '../user/user.module';
+import { UsersModule } from '../users/users.module';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategy/jwt/jwt.strategy';
 import { AuthController } from './auth.controller';
@@ -21,7 +21,7 @@ const jwtModule = JwtModule.registerAsync({
 });
 
 @Module({
-  imports: [UserModule, PassportModule, jwtModule],
+  imports: [UsersModule, PassportModule, jwtModule],
   providers: [AuthService, JwtStrategy, LocalStrategy],
   controllers: [AuthController],
 })

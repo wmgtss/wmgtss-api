@@ -10,16 +10,16 @@ import {
 import { ConfigService } from '@nestjs/config';
 import {
   ApiBody,
-  ApiExcludeEndpoint,
   ApiOkResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UserDto } from '../user/dto/user.dto';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create.user.dto';
-import { LoginUserDto } from './dto/login.user.dto';
+import { SignupDto } from './dto/signup.dto';
+import { LoginUserDto } from './dto/login.dto';
 import { LocalAuthGuard } from './strategy/local/local.guard';
+import { SignupResponseDto } from './dto/signup.response.dto';
+import { User } from '../users/entity/user.entity';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -38,7 +38,7 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  @ApiOkResponse({ type: UserDto })
+  @ApiOkResponse({ type: User })
   @ApiUnauthorizedResponse({ description: 'Invalid email or password' })
   @ApiBody({ type: LoginUserDto })
   async login(@Req() req, @Res() res) {
@@ -63,9 +63,10 @@ export class AuthController {
   }
 
   @Post('signup')
-  @ApiExcludeEndpoint()
-  async signUp(@Body() createUserDto: CreateUserDto, @Res() res) {
-    const { email, password, name } = createUserDto;
+  @ApiOkResponse({ type: SignupResponseDto })
+  @ApiBody({ type: SignupDto })
+  async signUp(@Req() req, @Res() res) {
+    const { email, password, name } = req.body;
 
     if (!email || !password || !name)
       throw new BadRequestException('Bad request');
@@ -77,7 +78,7 @@ export class AuthController {
     });
     res.cookie('access_token', token, this.cookieSettings).status(201).send({
       user,
-      pwned: createUserDto.pwned,
+      pwned: req.pwned,
     });
   }
 }

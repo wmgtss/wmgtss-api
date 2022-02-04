@@ -1,18 +1,18 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   BaseEntity,
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/entity/user.entity';
+import { Topic } from '../../topics/entity/topic.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
-@Entity('topic')
-export class Topic extends BaseEntity {
+@Entity('post')
+export class Post extends BaseEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -22,14 +22,14 @@ export class Topic extends BaseEntity {
     type: 'varchar',
     nullable: false,
   })
-  name: string;
+  title: string;
 
   @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  description: string;
+  content: string;
 
   @ApiProperty()
   @ManyToOne(() => User)
@@ -37,12 +37,12 @@ export class Topic extends BaseEntity {
   authorId: string;
 
   @ApiProperty()
-  @Column()
-  @CreateDateColumn()
-  createdOn: Date;
+  @ManyToOne(() => Topic)
+  @JoinColumn({ name: 'topicId' })
+  topicId: string;
 
   @ApiProperty()
   @Column()
-  @UpdateDateColumn()
-  updatedOn: Date;
+  @CreateDateColumn()
+  createdOn: Date;
 }
