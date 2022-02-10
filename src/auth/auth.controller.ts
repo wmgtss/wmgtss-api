@@ -29,13 +29,6 @@ export class AuthController {
     private configService: ConfigService,
   ) {}
 
-  cookieSettings = {
-    domain: this.configService.get('REACT_DOMAIN'),
-    secure: this.configService.get('HTTPS'),
-    httpOnly: true,
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-  };
-
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @ApiOkResponse({ type: User })
@@ -48,7 +41,12 @@ export class AuthController {
       password: loginUserDto.password,
     });
     return res
-      .cookie('access_token', token, this.cookieSettings)
+      .cookie('access_token', token, {
+        domain: this.configService.get('REACT_DOMAIN'),
+        secure: this.configService.get('HTTPS'),
+        httpOnly: true,
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      })
       .status(200)
       .send(req.user);
   }
