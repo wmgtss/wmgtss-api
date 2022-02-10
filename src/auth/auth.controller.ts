@@ -29,6 +29,13 @@ export class AuthController {
     private configService: ConfigService,
   ) {}
 
+  cookieSettings = {
+    domain: this.configService.get('REACT_DOMAIN'),
+    secure: this.configService.get('HTTPS'),
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+  }
+
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @ApiOkResponse({ type: User })
@@ -42,10 +49,8 @@ export class AuthController {
     });
     return res
       .cookie('access_token', token, {
-        domain: this.configService.get('REACT_DOMAIN'),
-        secure: this.configService.get('HTTPS'),
-        httpOnly: true,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        ...this.cookieSettings,
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
       })
       .status(200)
       .send(req.user);
@@ -55,7 +60,10 @@ export class AuthController {
   @ApiOkResponse()
   async logout(@Req() _req, @Res() res) {
     return res
-      .cookie('access_token', null, this.cookieSettings)
+      .cookie('access_token', null, {
+        ...this.cookieSettings,
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
+      })
       .status(200)
       .send('Logged out');
   }
@@ -74,7 +82,11 @@ export class AuthController {
       password,
       name,
     });
-    res.cookie('access_token', token, this.cookieSettings).status(201).send({
+    res.cookie('access_token', token, {
+      ...this.cookieSettings,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
+    })
+    .status(201).send({
       user,
       pwned: req.pwned,
     });
