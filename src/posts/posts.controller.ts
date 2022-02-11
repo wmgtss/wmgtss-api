@@ -1,4 +1,14 @@
-import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBody,
   ApiNotFoundResponse,
@@ -26,12 +36,26 @@ export class PostsController {
     return await this.postsService.createPost(req.body, req.user);
   }
 
-  @Get(':id')
+  @Get('topic/:id')
   @ApiOkResponse({ type: [AuthorPost] })
-  @ApiUnauthorizedResponse({ description: 'Not signed in' })
   @ApiNotFoundResponse({ description: 'Not found' })
-  async getPostsForTopic(@Param('id') id: string) {
-    const user = await this.postsService.getPostsForTopic(id);
+  async getPostsForTopic(@Param('id') topicId: string) {
+    const user = await this.postsService.getPostsForTopic(topicId);
     return user;
+  }
+
+  @Get(':id')
+  @ApiOkResponse({ type: AuthorPost })
+  @ApiNotFoundResponse({ description: 'Not found' })
+  async getPost(@Param('id') id: string) {
+    const user = await this.postsService.getPostById(id);
+    return user;
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteTopicById(@Param('id') id: string, @Req() req) {
+    return await this.postsService.deletePostById(id, req.user);
   }
 }

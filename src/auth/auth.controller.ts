@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  Body,
   Controller,
   Post,
   Req,
@@ -33,8 +32,7 @@ export class AuthController {
     domain: this.configService.get('REACT_DOMAIN'),
     secure: this.configService.get('HTTPS'),
     httpOnly: true,
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-  }
+  };
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
@@ -50,7 +48,7 @@ export class AuthController {
     return res
       .cookie('access_token', token, {
         ...this.cookieSettings,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       })
       .status(200)
       .send(req.user);
@@ -62,7 +60,7 @@ export class AuthController {
     return res
       .cookie('access_token', null, {
         ...this.cookieSettings,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       })
       .status(200)
       .send('Logged out');
@@ -74,21 +72,22 @@ export class AuthController {
   async signUp(@Req() req, @Res() res) {
     const { email, password, name } = req.body;
 
-    if (!email || !password || !name)
-      throw new BadRequestException('Bad request');
+    if (!email || !password || !name) throw new BadRequestException();
 
     const { user, token } = await this.authService.signUp({
       email,
       password,
       name,
     });
-    res.cookie('access_token', token, {
-      ...this.cookieSettings,
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
-    })
-    .status(201).send({
-      user,
-      pwned: req.pwned,
-    });
+    res
+      .cookie('access_token', token, {
+        ...this.cookieSettings,
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      })
+      .status(201)
+      .send({
+        user,
+        pwned: req.pwned,
+      });
   }
 }

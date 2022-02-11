@@ -13,6 +13,7 @@ import { Post } from './post.entity';
       .addSelect('post.topicId', 'topicId')
       .addSelect('post.createdOn', 'createdOn')
       .addSelect('user.name', 'authorName')
+      .addSelect('user.id', 'authorId')
       .from(Post, 'post')
       .leftJoin(User, 'user', 'user.id = post.authorId')
       .orderBy('post.createdOn', 'DESC'),
@@ -41,4 +42,8 @@ export class AuthorPost {
   @ApiProperty()
   @ViewColumn()
   authorName: string;
+
+  @ApiProperty()
+  @ViewColumn()
+  authorId: string;
 }

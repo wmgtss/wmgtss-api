@@ -37,7 +37,7 @@ export class Post extends BaseEntity {
   authorId: string;
 
   @ApiProperty()
-  @ManyToOne(() => Topic)
+  @ManyToOne(() => Topic, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'topicId' })
   topicId: string;
 

@@ -1,10 +1,15 @@
-import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import {
-  ApiBody,
-  ApiOkResponse,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from '../role/role.enum';
 import RoleGuard from '../role/role.guard';
 import { CreateTopicDto } from './dto/topic.create.dto';
@@ -21,14 +26,26 @@ export class TopicsController {
   @UseGuards(RoleGuard(Role.Admin))
   @ApiBody({ type: CreateTopicDto })
   @ApiOkResponse({ type: Topic })
-  @ApiUnauthorizedResponse({ description: 'Not signed in' })
   async createTopic(@Req() req) {
     return await this.topicsService.createTopic(req.body, req.user);
+  }
+
+  @Delete(':id')
+  @UseGuards(RoleGuard(Role.Admin))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteTopicById(@Param('id') id: string) {
+    return await this.topicsService.deleteTopicById(id);
   }
 
   @Get()
   @ApiOkResponse({ type: [AuthorTopic] })
   async getAllTopics() {
     return await this.topicsService.getTopics();
+  }
+
+  @Get(':id')
+  @ApiOkResponse({ type: AuthorTopic })
+  async getTopicById(@Param('id') id: string) {
+    return await this.topicsService.getTopicById(id);
   }
 }
