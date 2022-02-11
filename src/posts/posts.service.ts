@@ -37,7 +37,7 @@ export class PostsService {
   }
 
   async deletePostById(id: string, user: User) {
-    const existing = await this.postRepository.findOne({ id });
+    const existing = await this.authorPostRepository.findOne({ id });
     if (!existing) throw new NotFoundException();
     if (existing.authorId === user.id || user.roles.includes(Role.Admin)) {
       return this.postRepository.delete({ id });
