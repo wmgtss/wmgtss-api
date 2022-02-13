@@ -22,7 +22,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 ### Environment
 
-Create a `.env` file at the same directory level as this README. This will contain a number of configuration overrides read by the application when it starts. Below is a list of all available overrides, along with their defaults. The ones marked 'NOT SET' **must be set** in the `.env` file.
+Create file named `.env` at the same directory level as this README. This will contain a number of configuration overrides read by the application when it starts. Below is a list of all available overrides, along with their defaults. The ones marked 'NOT SET' **must be set** in the `.env` file.
 
 #### **Notes:**
 
