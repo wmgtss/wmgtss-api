@@ -1,41 +1,82 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# WMGTSS API
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is the server/backend component of the WMGTSS project for WM393 Assignment 2. This application uses [NestJS](https://github.com/nestjs/nest); a Typescript based framework for creating scalable server-side applications.
 
-## Installation
+**This project requires a large amount of configuration. To view the live app, I strongly suggest navigating to https://wmgtss.com/ to see the production application already running.**
+
+---
+
+## Setup
+
+Before starting the application for the first time, several steps **must** be carried out to ensure it works correctly.
+
+### PostgreSQL
+
+A Postgres server must be available, with a database created ready to receive connections. Once it has been created, the _uuid-ossp_ extension must be installed using the command below:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+```
+
+### Environment
+
+Create a `.env` file at the same directory level as this README. This will contain a number of configuration overrides read by the application when it starts. Below is a list of all available overrides, along with their defaults. The ones marked 'NOT SET' **must be set** in the `.env` file.
+
+#### **Notes:**
+
+`JWT_SECRET` may be set to any string of characters.
+
+`REACT_DOMAIN` and `REACT_URL` refer to the location of the frontend application. This cannot be localhost, due to constraints on cookies. See steps to fix this further down this page.
+
+```
+DATABASE_HOST=localhost
+DATABASE_NAME=wmgtss
+DATABASE_USER=app_user
+DATABASE_PASSWORD=NOT SET
+DATABASE_NAME=wmgtss
+JWT_SECRET=NOT SET
+PORT=5000
+REACT_DOMAIN=wmgtss.com
+REACT_URL=https://wmgtss.com/
+```
+
+### Hosts Fix
+
+As already mentioned, for authentication to work, the app must be running on a 'real' domain, and not localhost. To resolve this, until a better fix can be found, edit the `/etc/hosts` file and add the following content to the bottom. On Windows this can be found at `C:\Windows\System32\Drivers\etc\hosts`.
 
 ```bash
-$ npm install
+# WMGTSS Local Development
+127.0.0.1 app.com
+127.0.0.1 api.app.com
 ```
+
+Now set the `REACT_DOMAIN` and `REACT_URL` appropriately in the `.env` file:
+
+```
+REACT_DOMAIN=app.com
+REACT_URL=http://app.com/
+```
+
+### Installation
+
+Finally, to install npm dependencies, run the following command in this (the project root) folder.
+
+```bash
+# install npm dependencies
+$ npm install
+
+# build the application
+$ npm run build
+```
+
+---
 
 ## Running the app
 
 ```bash
-# development
+# development mode (recommended)
 $ npm run start
 
 # watch mode
@@ -45,29 +86,11 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+---
+
+### Testing
 
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
