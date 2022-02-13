@@ -22,11 +22,16 @@ import { AuthorPost } from './entity/authorPost.view';
 import { Post as PostEntity } from './entity/post.entity';
 import { PostsService } from './posts.service';
 
+/**
+ * Posts Controller
+ * Accepts requests on the /posts resource
+ */
 @Controller('posts')
 @ApiTags('Posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  // POST: /posts
   @Post()
   @ApiOkResponse({ type: PostEntity })
   @UseGuards(JwtAuthGuard)
@@ -36,6 +41,7 @@ export class PostsController {
     return await this.postsService.createPost(req.body, req.user);
   }
 
+  // GET /posts/topic/{id}
   @Get('topic/:id')
   @ApiOkResponse({ type: [AuthorPost] })
   @ApiNotFoundResponse({ description: 'Not found' })
@@ -44,6 +50,7 @@ export class PostsController {
     return user;
   }
 
+  // GET /posts/{id}
   @Get(':id')
   @ApiOkResponse({ type: AuthorPost })
   @ApiNotFoundResponse({ description: 'Not found' })
@@ -52,6 +59,7 @@ export class PostsController {
     return user;
   }
 
+  // DELETE /posts/{id}
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)

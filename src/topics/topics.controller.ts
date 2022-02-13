@@ -17,11 +17,16 @@ import { AuthorTopic } from './entity/authourTopic.view';
 import { Topic } from './entity/topic.entity';
 import { TopicsService } from './topics.service';
 
+/**
+ * Topics Controller
+ * Accepts requests on the /topics resource
+ */
 @ApiTags('Topics')
 @Controller('topics')
 export class TopicsController {
   constructor(private readonly topicsService: TopicsService) {}
 
+  // POST: /topics
   @Post()
   @UseGuards(RoleGuard(Role.Admin))
   @ApiBody({ type: CreateTopicDto })
@@ -30,6 +35,7 @@ export class TopicsController {
     return await this.topicsService.createTopic(req.body, req.user);
   }
 
+  // DELETE: /topics/{id}
   @Delete(':id')
   @UseGuards(RoleGuard(Role.Admin))
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -37,12 +43,14 @@ export class TopicsController {
     return await this.topicsService.deleteTopicById(id);
   }
 
+  // GET: /topics
   @Get()
   @ApiOkResponse({ type: [AuthorTopic] })
   async getAllTopics() {
     return await this.topicsService.getTopics();
   }
 
+  // GET: /topics/{id}
   @Get(':id')
   @ApiOkResponse({ type: AuthorTopic })
   async getTopicById(@Param('id') id: string) {

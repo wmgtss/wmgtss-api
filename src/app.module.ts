@@ -8,11 +8,13 @@ import { TopicsModule } from './topics/topics.module';
 import { PostsModule } from './posts/posts.module';
 import config from './config';
 
+// Load the config module
 const configModule = ConfigModule.forRoot({
   isGlobal: true,
   load: [config],
 });
 
+// Connect to the database using the credentials from the configService
 const dbModule = TypeOrmModule.forRootAsync({
   imports: [ConfigModule],
   useFactory: (configService: ConfigService) => configService.get('DATABASE'),
@@ -20,7 +22,14 @@ const dbModule = TypeOrmModule.forRootAsync({
 });
 
 @Module({
-  imports: [configModule, dbModule, UsersModule, AuthModule, TopicsModule, PostsModule],
+  imports: [
+    configModule,
+    dbModule,
+    UsersModule,
+    AuthModule,
+    TopicsModule,
+    PostsModule,
+  ],
   controllers: [AppController],
 })
 export class AppModule {}

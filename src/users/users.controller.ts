@@ -19,11 +19,16 @@ import { PublicUserDto } from './dto/user.public.dto';
 import { UsersService } from './users.service';
 import { User } from './entity/user.entity';
 
+/**
+ * User Controller
+ * Accepts requests on the /users resource
+ */
 @ApiTags('Users')
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  // GET: /user
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: User })
@@ -32,6 +37,7 @@ export class UsersController {
     return req.user;
   }
 
+  // PUT: /user/password
   @Put('password')
   @UseGuards(JwtAuthGuard)
   @ApiUnauthorizedResponse({ description: 'Not signed in' })
@@ -43,6 +49,7 @@ export class UsersController {
     return { pwned };
   }
 
+  // GET: /user/{id}
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: PublicUserDto })
@@ -53,6 +60,7 @@ export class UsersController {
     return user;
   }
 
+  // DELETE: /user
   @Delete()
   @UseGuards(JwtAuthGuard)
   @ApiNoContentResponse({ description: 'User deleted' })

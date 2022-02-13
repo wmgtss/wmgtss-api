@@ -20,6 +20,10 @@ import { LocalAuthGuard } from './strategy/local/local.guard';
 import { SignupResponseDto } from './dto/signup.response.dto';
 import { User } from '../users/entity/user.entity';
 
+/**
+ * Auth Controller
+ * Accepts requests on the /auth resource
+ */
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
@@ -34,6 +38,7 @@ export class AuthController {
     httpOnly: true,
   };
 
+  // POST: /auth/login
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @ApiOkResponse({ type: User })
@@ -54,6 +59,7 @@ export class AuthController {
       .send(req.user);
   }
 
+  // POST: /auth/logout
   @Post('logout')
   @ApiOkResponse()
   async logout(@Req() _req, @Res() res) {
@@ -66,6 +72,7 @@ export class AuthController {
       .send('Logged out');
   }
 
+  // POST: /auth/signup
   @Post('signup')
   @ApiOkResponse({ type: SignupResponseDto })
   @ApiBody({ type: SignupDto })

@@ -8,6 +8,7 @@ import config from './config';
 const logger = new Logger('Entrypoint');
 
 async function createApp() {
+  // If HTTPS is enabled, load certificate and key from files
   if (config().HTTPS) {
     logger.log('HTTPS is enabled, loading certificate from ./secrets');
     const fs = require('fs');
@@ -27,6 +28,8 @@ async function bootstrap() {
   const app = await createApp();
   const PORT = config().PORT;
 
+  // Set up Swagger/OpenAPI for documentation
+  // In production, this can be found at https://api.wmgtss.com/docs
   const swaggerConfig = new DocumentBuilder()
     .setTitle('WMG: TSS API')
     .setDescription('API for the WMG Teaching Support System')
@@ -35,12 +38,14 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, document);
 
+  // Enable cookies and CORS
   app.use(cookieParser());
   app.enableCors({
     origin: config().REACT_URL,
     credentials: true,
   });
 
+  // Listen on the port specified in the config
   await app.listen(PORT, () => {
     logger.log(`App listening at http://localhost:${PORT}`);
   });
