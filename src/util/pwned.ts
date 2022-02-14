@@ -8,9 +8,7 @@ import { createHash } from 'crypto';
  * those provided. We can then search the list for our full hash.
  * If it appears in the list, the user's password has been breached.
  */
-export async function isPasswordPwned(
-  password: string,
-): Promise<number | undefined> {
+export async function isPasswordPwned(password: string): Promise<number> {
   if (!password) throw new BadRequestException();
   const fetch = require('node-fetch');
 
@@ -28,7 +26,7 @@ export async function isPasswordPwned(
   // If there's a match, find the number of times it has appeared in breaches
   if (match) {
     const count = match.split(':')[1];
-    return count;
+    return parseInt(count);
   }
 
   // If there was no match, return 0 matches

@@ -66,7 +66,7 @@ export class UsersController {
   @ApiNoContentResponse({ description: 'User deleted' })
   @ApiUnauthorizedResponse({ description: 'Not signed in' })
   async deleteCurrent(@Req() req) {
-    const id = await this.usersService.deleteById(req.user.id);
-    return { id };
+    const conf = await this.usersService.deleteById(req.user.id);
+    return conf;
   }
 }

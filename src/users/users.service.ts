@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 import { SignupDto } from '../auth/dto/signup.dto';
 import { PublicUserDto } from './dto/user.public.dto';
-import { isPasswordPwned } from 'src/util/pwned';
+import { isPasswordPwned } from '../util/pwned';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
